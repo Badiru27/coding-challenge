@@ -81,7 +81,7 @@ var search = function (nums, target) {
     return -1;
   }
 
-  const leftSearch = binarySearch(0, left-1, target);
+  const leftSearch = binarySearch(0, left - 1, target);
 
   if (leftSearch !== -1) return leftSearch;
 
@@ -91,10 +91,9 @@ var search = function (nums, target) {
 // const val = [7, 8, 9, 10, 11, 12, 13, 14, 15, 0, 1, 2, 3, 4, 5, 6];
 // search(val, 3);
 
-
 /**
  * Definition for isBadVersion()
- * 
+ *
  * @param {integer} version number
  * @return {boolean} whether the version is bad
  * isBadVersion = function(version) {
@@ -106,34 +105,114 @@ var search = function (nums, target) {
  * @param {function} isBadVersion()
  * @return {function}
  */
-var solution = function(isBadVersion) {
-    /**
-     * @param {integer} n Total versions
-     * @return {integer} The first bad version
-     */
-    return function(n) {
+var solution = function (isBadVersion) {
+  /**
+   * @param {integer} n Total versions
+   * @return {integer} The first bad version
+   */
+  return function (n) {
+    let left = 0;
+    let right = n;
 
-        let left = 0;
-        let right = n;
+    while (left < right) {
+      const mid = left + Math.floor((right - left) / 2);
 
-        while(left < right){
+      const midBad = isBadVersion(mid);
 
-            const mid = Math.floor((left + right)/2);
+      if (midBad) {
+        right = mid;
+      } else {
+        left = mid + 1;
+      }
+    }
 
-            const midBad = isBadVersion(mid);
-
-            if(midBad){
-                right = mid -1;
-            }else{
-
-                left = mid;
-            }
-
-
-        }
-
-        return left;
-        
-    };
+    return left;
+  };
 };
+
+//  mid = left + (right -left)/2
+
+// Input: nums = [1,2,3,1]
+// Output: 2
+// Explanation: 3 is a peak element and your function should return the index number 2.
+
+// Input: nums = [1,2,1,3,5,6,4]
+// Output: 5
+// Explanation: Your function can return either index number 1 where the peak element is 2,
+//or index number 5 where the peak element is 6.
+
+var findPeakElement = function (nums) {
+  const len = nums.length - 1;
+  let left = 0;
+  let right = len;
+
+  while (left < right) {
+    const mid = left + Math.floor((right - left) / 2);
+
+    if (nums[mid] > nums[mid + 1]) {
+      right = mid;
+    } else {
+      left = mid + 1;
+    }
+  }
+
+  return left;
+};
+
+// console.log(findPeakElement([1,2,3,1]))
+
+// Input: nums = [3,4,5,1,2]
+// Output: 1
+// Explanation: The original array was [1,2,3,4,5] rotated 3 times.
+// Example 2:
+
+// Input: nums = [4,5,6,7,0,1,2]
+// Output: 0
+// Explanation: The original array was [0,1,2,4,5,6,7] and it was rotated 4 times.
+// Example 3:
+
+// Input: nums = [11,13,15,17]
+// Output: 11
+// Explanation: The original array was [11,13,15,17] and it was rotated 4 times.
+
+var findMin = function (nums) {
+  const len = nums.length - 1;
+  let left = 0;
+  let right = len;
+
+  if (len === 0) {
+    return nums[0];
+  }
+
+  if (nums[len] > nums[0]) {
+    return nums[0]
+  }
+
+  while (left < right) {
+    const mid = left + Math.floor((right - left) / 2);
+
+    if (nums[mid] > nums[mid + 1]) {
+      return nums[mid + 1];
+    }
+
+    if (nums[mid - 1] > nums[mid]) {
+      return nums[mid];
+    }
+
+    if (nums[mid] > nums[0]) {
+      left = mid + 1;
+    } else {
+      right = mid;
+    }
+  }
+
+  return nums[left];
+};
+
+console.log(findMin([3, 1, 2]));
+
+// console.log(findMin([4, 5, 6, 7, 0, 1, 2]));
+// console.log(findMin([4,5,6,7,0,1,2]))
+// console.log(findMin([11,13,15,17]))
+
 
